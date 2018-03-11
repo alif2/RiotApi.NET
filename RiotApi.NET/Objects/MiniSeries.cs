@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace RiotApi.NET
+namespace RiotApi.NET.Objects
 {
     public class MiniSeries
     {

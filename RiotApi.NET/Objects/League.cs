@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace RiotApi.NET
+namespace RiotApi.NET.Objects
 {
     public class League
     {
