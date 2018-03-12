@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RiotApi.NET;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 
@@ -35,37 +36,51 @@ namespace RiotApi.NET_Test
         [TestMethod]
         public void WhenRequestMatchByAccountWithBeginIndexButNoEndIndexShouldReturnBeginIndexPlus100()
         {
-            throw new NotImplementedException();
+            var beginIndex = 0;
+            var matches = MatchApi.GetMatchesByAccountId(32766, beginIndex: beginIndex);
+            Assert.IsTrue(matches.EndIndex == beginIndex + 100);
         }
 
         [TestMethod]
         public void WhenRequestMatchByAccountWithEndIndexButNotBeginIndexShouldStartAt0()
         {
-            throw new NotImplementedException();
+            var matches = MatchApi.GetMatchesByAccountId(32766, endIndex: 50);
+            Assert.IsTrue(matches.StartIndex == 0);
         }
 
         [TestMethod]
+        [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestMatchByAccountWithEndIndexLessThanStartIndexShouldThrowException()
         {
-            throw new NotImplementedException();
+            MatchApi.GetMatchesByAccountId(32766, beginIndex: 2, endIndex: 1);
         }
 
         [TestMethod]
+        [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestMatchByAccountWithRangeGreaterThan100ShouldThrowException()
         {
-            throw new NotImplementedException();
+            MatchApi.GetMatchesByAccountId(32766, beginIndex: 200, endIndex: 1);
         }
 
         [TestMethod]
+        [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestMatchByAccountWithEndTimeLessThanBeginTimeShouldThrowException()
         {
-            throw new NotImplementedException();
+            MatchApi.GetMatchesByAccountId(32766, beginTime: 1000, endTime: 0);
         }
 
         [TestMethod]
+        [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestMatchByAccountWithTimeRanageGreaterThan1WeekShouldThrowException()
         {
-            throw new NotImplementedException();
+            MatchApi.GetMatchesByAccountId(32766, beginTime: 1517443200, endTime: 1520808582);
+        }
+
+        [TestMethod]
+        public void WhenRequestMatchByAccountShouldReturnObject()
+        {
+            var matches = MatchApi.GetMatchesByAccountId(32766, new List<int>(11), new List<int>(420), new List<int>(75), 20, 25, 1518425747064);
+            
         }
 
         [TestMethod]
@@ -88,5 +103,41 @@ namespace RiotApi.NET_Test
         {
             MatchApi.GetMatchTimelineById(-1);
         }
+
+        [TestMethod]
+        public void WhenRequestMatchTimelineShouldReturnObject()
+        {
+            throw new NotImplementedException();
+        }
+
+        // TODO: Currently unavailable for testing
+        /**
+        [TestMethod]
+        [ExpectedException(typeof(HttpRequestException))]
+        public void WhenRequestMatchesByTournamentCodeWithNullCodeShouldThrowException()
+        {
+            MatchApi.GetMatchesByTournamentCode(null);
+        }
+
+        [TestMethod]
+        public void WhenRequestMatchesByTournamentCodeShouldReturnList()
+        {
+            var matches = MatchApi.GetMatchesByTournamentCode("NA1234a-1a23b456-a1b2-1abc-ab12-1234567890ab");
+            Assert.IsTrue(matches.Any());
+        }
+ 
+        [TestMethod]
+        [ExpectedException(typeof(HttpRequestException))]
+        public void WhenRequestMatchByTournamentCodeAndMatchIdWithNullAndNegativeIdCodeShouldThrowException()
+        {
+            MatchApi.GetMatchByTournamentCode(-1, null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(HttpRequestException))]
+        public void WhenRequestMatchByTournamentCodeAndMatchIdWithNegativeIdShouldThrowException()
+        {
+            MatchApi.GetMatchByTournamentCode(-1, "NA1234a-1a23b456-a1b2-1abc-ab12-1234567890ab");
+        } **/
     }
 }

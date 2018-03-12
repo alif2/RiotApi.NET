@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using RiotApi.NET.Objects;
+﻿using RiotApi.NET.Objects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 
 namespace RiotApi.NET
@@ -19,9 +19,20 @@ namespace RiotApi.NET
             return httpResponseMessage.Content.ReadAsAsync<Match>().Result;
         }
 
-        public static MatchList GetMatchesByAccountId(int accountId)
+        public static MatchList GetMatchesByAccountId(int accountId, IEnumerable<int> seasons = null, IEnumerable<int> queueIds = null, 
+            IEnumerable<int> championIds = null, int beginIndex = -1, int endIndex = -1, long beginTime = -1, long endTime = -1)
         {
-            var httpResponseMessage = _httpClient.GetAsync($"/lol/match/v3/matchlists/by-account/{accountId}?api_key={_apiKey}").Result;
+            var optionalParameters = string.Empty;
+
+            if (seasons != null) optionalParameters += "&seasons=" + string.Join(",", seasons.ToArray());
+            if (queueIds != null) optionalParameters += "&queueIds=" + string.Join(",", queueIds.ToArray());
+            if (championIds != null) optionalParameters += "&championIds=" + string.Join(",", championIds.ToArray());
+            if (beginIndex != -1) optionalParameters += "&beginIndex=" + beginIndex;
+            if (endIndex != -1) optionalParameters += "&endIndex=" + endIndex;
+            if (beginTime != -1) optionalParameters += "&beginTime=" + beginTime;
+            if (endTime != -1) optionalParameters += "&endTime=" + endTime;
+
+            var httpResponseMessage = _httpClient.GetAsync($"/lol/match/v3/matchlists/by-account/{accountId}?api_key={_apiKey}{optionalParameters}").Result;
             httpResponseMessage.EnsureSuccessStatusCode();
 
             return httpResponseMessage.Content.ReadAsAsync<MatchList>().Result;
@@ -42,70 +53,21 @@ namespace RiotApi.NET
 
             return httpResponseMessage.Content.ReadAsAsync<MatchTimeline>().Result;
         }
-    }
 
-    public class MatchTimeline
-    {
-        [JsonProperty("frames")]
-        public IEnumerable<MatchFrame> Frames { get; set; }
+        public static IEnumerable<long> GetMatchesByTournamentCode(string tournamentCode)
+        {
+            var httpResponseMessage = _httpClient.GetAsync($"/lol/match/v3/matches/by-tournament-code/{tournamentCode}/ids?api_key={_apiKey}").Result;
+            httpResponseMessage.EnsureSuccessStatusCode();
 
-        [JsonProperty("frameInterval")]
-        public long FrameInterval { get; set; }
-    }
+            return httpResponseMessage.Content.ReadAsAsync<IEnumerable<long>>().Result;
+        }
 
-    public class MatchFrame
-    {
-        [JsonProperty("timestamp")]
-        public long Timestamp { get; set; }
+        public static Match GetMatchByTournamentCode(long matchId, string tournamentCode)
+        {
+            var httpResponseMessage = _httpClient.GetAsync($"/lol/match/v3/matches/{matchId}/by-tournament-code/{tournamentCode}?api_key={_apiKey}").Result;
+            httpResponseMessage.EnsureSuccessStatusCode();
 
-        [JsonProperty("participantFrames")]
-        public Dictionary<int, MatchParticipantFrame> ParticipantFrames { get; set; }
-
-        [JsonProperty("events")]
-        public IEnumerable<MatchEvent> Events { get; set; }
-    }
-
-    public class MatchEvent
-    {
-        // (Legal values: CHAMPION_KILL, WARD_PLACED, WARD_KILL, BUILDING_KILL, ELITE_MONSTER_KILL, ITEM_PURCHASED, ITEM_SOLD, 
-        // ITEM_DESTROYED, ITEM_UNDO, SKILL_LEVEL_UP, ASCENDED_EVENT, CAPTURE_POINT, PORO_KING_SUMMON)
-        [JsonProperty("type")]
-        public string Type { get; set; }
-
-        [JsonProperty("teamId")]
-        public int TeamId { get; set; }
-
-        [JsonProperty("eventType")]
-        public string EventType { get; set; }
-
-        [JsonProperty("creatorId")]
-        public int CreatorId { get; set; }
-
-        [JsonProperty("assistingParticipantIds")]
-        public 
-
-        [JsonProperty("towerType")]
-        
-        [JsonProperty("ascendedType")]
-        [JsonProperty("killerId")]
-        [JsonProperty("levelUpType")]
-            [JsonProperty("pointCaptured")]
-        
-            [JsonProperty("wardType")]
-        [JsonProperty("monsterType")]
-            
-            [JsonProperty("skillSlot")]
-                [JsonProperty("victimId")]
-            [JsonProperty("timestamp")]
-                [JsonProperty("afterId")]
-            [JsonProperty("monsterSubType")]
-                [JsonProperty("laneType")]
-            [JsonProperty("itemId")]
-                [JsonProperty("participantId")]
-            [JsonProperty("buildingType")]
-                
-            [JsonProperty("position")]
-                [JsonProperty(" beforeId")]
-
+            return httpResponseMessage.Content.ReadAsAsync<Match>().Result;
+        }
     }
 }
