@@ -10,10 +10,11 @@ namespace RiotApi.NET
     {
         private static HttpClient _httpClient = new HttpClient { BaseAddress = new Uri("https://na1.api.riotgames.com") };
         private static string _apiKey = "RGAPI-9aeb4819-3ba4-4268-87b2-e0568333a4e6";
+        private static string _baseUrl = "/lol/platform/v3/champions";
 
         public static IEnumerable<Champion> GetAllChampions()
         {
-            var httpResponseMessage = _httpClient.GetAsync($"/lol/platform/v3/champions?api_key={_apiKey}").Result;
+            var httpResponseMessage = _httpClient.GetAsync(_baseUrl + $"?api_key={_apiKey}").Result;
             httpResponseMessage.EnsureSuccessStatusCode();
 
             var champions = httpResponseMessage.Content.ReadAsAsync<Dictionary<string, IEnumerable<Champion>>>().Result;
@@ -22,7 +23,7 @@ namespace RiotApi.NET
 
         public static Champion GetChampion(int championId)
         {
-            var httpResponseMessage = _httpClient.GetAsync($"/lol/platform/v3/champions/{championId}?api_key={_apiKey}").Result;
+            var httpResponseMessage = _httpClient.GetAsync(_baseUrl + $"/{championId}?api_key={_apiKey}").Result;
             httpResponseMessage.EnsureSuccessStatusCode();
 
             return httpResponseMessage.Content.ReadAsAsync<Champion>().Result;
