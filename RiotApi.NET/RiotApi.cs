@@ -1,7 +1,7 @@
-﻿using System;
-using System.Configuration;
+﻿using RiotApi.NET.Objects;
+using System;
+using System.IO;
 using System.Net.Http;
-using RiotApi.NET.Objects;
 
 namespace RiotApi.NET
 {
@@ -13,7 +13,7 @@ namespace RiotApi.NET
             get
             {
                 if (_apiKey != null) return _apiKey;
-                return _apiKey = ConfigurationManager.AppSettings["api-key"];
+                return _apiKey = File.ReadAllText("api-key.txt");
             }
             set => _apiKey = value;
         }
