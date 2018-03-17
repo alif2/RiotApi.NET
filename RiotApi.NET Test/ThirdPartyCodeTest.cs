@@ -11,13 +11,13 @@ namespace RiotApi.NET_Test
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestThirdPartyCodeBySummonerForNegativeSummonerIdShouldThrowException()
         {
-            ThirdPartyCodeApi.GetThirdPartyCodeBySummonerId(-1);
+            ThirdPartyCodeApi.GetThirdPartyCode(-1);
         }
 
         [TestMethod]
         public void WhenRequestThirdPartyCodeBySummonerShouldReturnString()
         {
-            var thirdPartyCode = ThirdPartyCodeApi.GetThirdPartyCodeBySummonerId(5908);
+            var thirdPartyCode = ThirdPartyCodeApi.GetThirdPartyCode(5908);
             Assert.IsFalse(string.IsNullOrEmpty(thirdPartyCode));
         }
     }

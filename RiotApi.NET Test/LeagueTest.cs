@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RiotApi.NET;
-using System.Linq;
 using System.Net.Http;
 
 namespace RiotApi.NET_Test
@@ -51,10 +50,10 @@ namespace RiotApi.NET_Test
         }
 
         [TestMethod]
-        public void WhenRequestLeaguePositionForNegativeSummonerIdShouldReturnEmptyList()
+        [ExpectedException(typeof(HttpRequestException))]
+        public void WhenRequestLeaguePositionForNegativeSummonerIdShouldThrowException()
         {
-            var emptyList = LeagueApi.GetLeaguePositions(-1);
-            Assert.AreEqual(0, emptyList.Count());
+            LeagueApi.GetLeaguePositions(-1);
         }
     }
 }

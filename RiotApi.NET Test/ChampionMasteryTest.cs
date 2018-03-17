@@ -9,9 +9,10 @@ namespace RiotApi.NET_Test
     public class ChampionMasteryTest
     {
         [TestMethod]
-        public void WhenRequestSummonerMasteryScoreForNegativeSummonerIdShouldReturnZero()
+        [ExpectedException(typeof(HttpRequestException))]
+        public void WhenRequestSummonerMasteryScoreForNegativeSummonerIdShouldThrowException()
         {
-            Assert.IsTrue(ChampionMasteryApi.GetMasteryScoreBySummonerId(-1) == 0);
+            ChampionMasteryApi.GetMasteryScoreBySummonerId(-1);
         }
 
         [TestMethod]
@@ -48,9 +49,10 @@ namespace RiotApi.NET_Test
         }
 
         [TestMethod]
-        public void WhenRequestSummonerMasteryScoreBySummonerForNegativeSummonerIdShouldReturnEmptyList()
+        [ExpectedException(typeof(HttpRequestException))]
+        public void WhenRequestSummonerMasteryScoreBySummonerForNegativeSummonerIdShouldThrowException()
         {
-            Assert.AreEqual(0, ChampionMasteryApi.GetChampionMasteriesBySummonerId(-1).Count());
+            ChampionMasteryApi.GetChampionMasteriesBySummonerId(-1);
         }
 
         [TestMethod]

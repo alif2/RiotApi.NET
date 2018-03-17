@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RiotApi.NET;
+using RiotApi.NET.Objects;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -29,21 +30,21 @@ namespace RiotApi.NET_Test
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestMatchByAccountWithNegativeAccountIdShouldThrowException()
         {
-            MatchApi.GetMatchesByAccountId(-1);
+            MatchApi.GetMatchesByAccountId(-1, null);
         }
 
         [TestMethod]
         public void WhenRequestMatchByAccountWithBeginIndexButNoEndIndexShouldReturnBeginIndexPlus100()
         {
             var beginIndex = 0;
-            var matches = MatchApi.GetMatchesByAccountId(32766, beginIndex: beginIndex);
+            var matches = MatchApi.GetMatchesByAccountId(32766, new OptionalParameters { BeginIndex = beginIndex });
             Assert.IsTrue(matches.EndIndex == beginIndex + 100);
         }
 
         [TestMethod]
         public void WhenRequestMatchByAccountWithEndIndexButNotBeginIndexShouldStartAt0()
         {
-            var matches = MatchApi.GetMatchesByAccountId(32766, endIndex: 50);
+            var matches = MatchApi.GetMatchesByAccountId(32766, new OptionalParameters{ EndIndex = 50 });
             Assert.IsTrue(matches.StartIndex == 0);
         }
 
@@ -51,34 +52,34 @@ namespace RiotApi.NET_Test
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestMatchByAccountWithEndIndexLessThanStartIndexShouldThrowException()
         {
-            MatchApi.GetMatchesByAccountId(32766, beginIndex: 2, endIndex: 1);
+            MatchApi.GetMatchesByAccountId(32766, new OptionalParameters { BeginIndex = 2, EndIndex = 1 });
         }
 
         [TestMethod]
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestMatchByAccountWithRangeGreaterThan100ShouldThrowException()
         {
-            MatchApi.GetMatchesByAccountId(32766, beginIndex: 200, endIndex: 1);
+            MatchApi.GetMatchesByAccountId(32766, new OptionalParameters { BeginIndex = 200, EndIndex = 1 });
         }
 
         [TestMethod]
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestMatchByAccountWithEndTimeLessThanBeginTimeShouldThrowException()
         {
-            MatchApi.GetMatchesByAccountId(32766, beginTime: 1000, endTime: 0);
+            MatchApi.GetMatchesByAccountId(32766, new OptionalParameters { BeginTime = 1000, EndTime = 0 });
         }
 
         [TestMethod]
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestMatchByAccountWithTimeRanageGreaterThan1WeekShouldThrowException()
         {
-            MatchApi.GetMatchesByAccountId(32766, beginTime: 1517443200, endTime: 1520808582);
+            MatchApi.GetMatchesByAccountId(32766, new OptionalParameters { BeginTime = 1517443200, EndTime = 1520808582 });
         }
 
         [TestMethod]
         public void WhenRequestMatchByAccountShouldReturnObject()
         {
-            var matches = MatchApi.GetMatchesByAccountId(32766, new List<int>{11}, new List<int>{420}, new List<int>{75}, 20, 25, 1518425747064L);
+            var matches = MatchApi.GetMatchesByAccountId(32766, new OptionalParameters(new List<int>{11}, new List<int>{420}, new List<int>{75}, 20, 25, 1518425747064L));
             Assert.IsTrue(matches.Matches.Count() == 1);
         }
 
@@ -110,35 +111,5 @@ namespace RiotApi.NET_Test
             Assert.IsTrue(matchTimeline.Frames.Any());
             Assert.IsTrue(matchTimeline.FrameInterval > 0);
         }
-
-        // TODO: Currently unavailable for testing
-        /**
-        [TestMethod]
-        [ExpectedException(typeof(HttpRequestException))]
-        public void WhenRequestMatchesByTournamentCodeWithNullCodeShouldThrowException()
-        {
-            MatchApi.GetMatchesByTournamentCode(null);
-        }
-
-        [TestMethod]
-        public void WhenRequestMatchesByTournamentCodeShouldReturnList()
-        {
-            var matches = MatchApi.GetMatchesByTournamentCode("NA1234a-1a23b456-a1b2-1abc-ab12-1234567890ab");
-            Assert.IsTrue(matches.Any());
-        }
- 
-        [TestMethod]
-        [ExpectedException(typeof(HttpRequestException))]
-        public void WhenRequestMatchByTournamentCodeAndMatchIdWithNullAndNegativeIdCodeShouldThrowException()
-        {
-            MatchApi.GetMatchByTournamentCode(-1, null);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(HttpRequestException))]
-        public void WhenRequestMatchByTournamentCodeAndMatchIdWithNegativeIdShouldThrowException()
-        {
-            MatchApi.GetMatchByTournamentCode(-1, "NA1234a-1a23b456-a1b2-1abc-ab12-1234567890ab");
-        } **/
     }
 }
