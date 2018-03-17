@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RiotApi.NET;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -79,8 +78,8 @@ namespace RiotApi.NET_Test
         [TestMethod]
         public void WhenRequestMatchByAccountShouldReturnObject()
         {
-            var matches = MatchApi.GetMatchesByAccountId(32766, new List<int>(11), new List<int>(420), new List<int>(75), 20, 25, 1518425747064);
-            
+            var matches = MatchApi.GetMatchesByAccountId(32766, new List<int>{11}, new List<int>{420}, new List<int>{75}, 20, 25, 1518425747064L);
+            Assert.IsTrue(matches.Matches.Count() == 1);
         }
 
         [TestMethod]
@@ -107,7 +106,9 @@ namespace RiotApi.NET_Test
         [TestMethod]
         public void WhenRequestMatchTimelineShouldReturnObject()
         {
-            throw new NotImplementedException();
+            var matchTimeline = MatchApi.GetMatchTimelineById(2717074144);
+            Assert.IsTrue(matchTimeline.Frames.Any());
+            Assert.IsTrue(matchTimeline.FrameInterval > 0);
         }
 
         // TODO: Currently unavailable for testing
