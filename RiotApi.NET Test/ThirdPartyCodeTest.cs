@@ -17,7 +17,7 @@ namespace RiotApi.NET_Test
         [TestMethod]
         public void WhenRequestThirdPartyCodeBySummonerShouldReturnString()
         {
-            var thirdPartyCode = ThirdPartyCodeApi.GetThirdPartyCode(5908);
+            var thirdPartyCode = ThirdPartyCodeApi.GetThirdPartyCode(TestSettings.SummonerId);
             Assert.IsFalse(string.IsNullOrEmpty(thirdPartyCode));
         }
     }

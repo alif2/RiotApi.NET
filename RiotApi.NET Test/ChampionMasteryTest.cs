@@ -10,15 +10,17 @@ namespace RiotApi.NET_Test
     {
         [TestMethod]
         [ExpectedException(typeof(HttpRequestException))]
-        public void WhenRequestSummonerMasteryScoreForNegativeSummonerIdShouldThrowException()
+        public void WhenRequestSummonerMasteriesBySummonerForNegativeSummonerIdShouldThrowException()
         {
-            ChampionMasteryApi.GetMasteryScoreBySummonerId(-1);
+            ChampionMasteryApi.GetChampionMasteriesBySummonerId(-1);
         }
 
         [TestMethod]
-        public void WhenRequestSummonerMasteryScoreShouldReturnInt()
+        public void WhenRequestSummonerMasteriesBySummonerShouldReturnMasteries()
         {
-            Assert.IsTrue(ChampionMasteryApi.GetMasteryScoreBySummonerId(5908) >= 0);
+            var championMasteryList = ChampionMasteryApi.GetChampionMasteriesBySummonerId(TestSettings.SummonerId).ToList();
+            Assert.IsTrue(championMasteryList.Any());
+            Assert.IsTrue(championMasteryList.All(t => t.ChampionId > 0));
         }
 
         [TestMethod]
@@ -32,35 +34,31 @@ namespace RiotApi.NET_Test
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestSummonerMasteryScoreBySummonerByChampionForNegativeChampionIdShouldThrowException()
         {
-            ChampionMasteryApi.GetChampionMasteryBySummonerIdAndChampionId(5908, -1);
+            ChampionMasteryApi.GetChampionMasteryBySummonerIdAndChampionId(TestSettings.SummonerId, -1);
         }
 
         [TestMethod]
         public void WhenRequestSummonerMasteryScoreBySummonerByChampionShouldReturnChampionMastery()
         {
-            long summonerId = 5908;
-            long championId = 1;
-            var championMastery = ChampionMasteryApi.GetChampionMasteryBySummonerIdAndChampionId(summonerId, championId);
+            var championMastery = ChampionMasteryApi.GetChampionMasteryBySummonerIdAndChampionId(TestSettings.SummonerId, TestSettings.ChampionId);
 
             Assert.IsNotNull(championMastery);
-            Assert.AreEqual(summonerId, championMastery.SummonerId);
-            Assert.AreEqual(championId, championMastery.ChampionId);
+            Assert.AreEqual(TestSettings.SummonerId, championMastery.SummonerId);
+            Assert.AreEqual(TestSettings.ChampionId, championMastery.ChampionId);
             Assert.IsTrue(championMastery.ChampionLevel > 0);
         }
 
         [TestMethod]
         [ExpectedException(typeof(HttpRequestException))]
-        public void WhenRequestSummonerMasteryScoreBySummonerForNegativeSummonerIdShouldThrowException()
+        public void WhenRequestSummonerMasteryScoreForNegativeSummonerIdShouldThrowException()
         {
-            ChampionMasteryApi.GetChampionMasteriesBySummonerId(-1);
+            ChampionMasteryApi.GetMasteryScoreBySummonerId(-1);
         }
 
         [TestMethod]
-        public void WhenRequestSummonerMasteryScoreBySummonerShouldReturnMasteries()
+        public void WhenRequestSummonerMasteryScoreShouldReturnInt()
         {
-            var championMasteryList = ChampionMasteryApi.GetChampionMasteriesBySummonerId(5908).ToList();
-            Assert.IsTrue(championMasteryList.Any());
-            Assert.IsTrue(championMasteryList.All(t => t.ChampionId > 0));
+            Assert.IsTrue(ChampionMasteryApi.GetMasteryScoreBySummonerId(TestSettings.SummonerId) >= 0);
         }
     }
 }

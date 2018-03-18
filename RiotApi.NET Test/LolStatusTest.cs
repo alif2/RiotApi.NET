@@ -15,8 +15,12 @@ namespace RiotApi.NET_Test
 
             Assert.IsNotNull(shardStatus);
             Assert.IsNotNull(shardStatus.Name);
-            Assert.IsNotNull(shardStatus.Services);
+            Assert.IsNotNull(shardStatus.Region);
+            Assert.IsNotNull(shardStatus.Hostname);
             Assert.IsNotNull(shardStatus.Slug);
+            Assert.IsNotNull(shardStatus.Locales);
+            Assert.IsNotNull(shardStatus.Services);
+            
             Assert.IsNotNull(shardServices.TrueForAll(t => t.Name != null && t.Incidents.All(u => u.Id > 0)));
         }
     }

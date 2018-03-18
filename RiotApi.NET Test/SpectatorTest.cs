@@ -20,11 +20,21 @@ namespace RiotApi.NET_Test
         {
             try
             {
-                var activeGame = SpectatorApi.GetActiveGame(32766);
-                Assert.IsNotNull(activeGame.GameId);
+                var activeGame = SpectatorApi.GetActiveGame(TestSettings.SummonerId);
+                Assert.IsNotNull(activeGame);
                 Assert.IsTrue(activeGame.GameId > 0);
                 Assert.IsTrue(activeGame.GameLength > 0);
-                
+                Assert.IsTrue(activeGame.GameId > 0);
+                Assert.IsTrue(activeGame.MapId > 0);
+                Assert.IsNotNull(activeGame.PlatformId);
+                Assert.IsNotNull(activeGame.GameMode);
+                Assert.IsNotNull(activeGame.GameType);
+                Assert.IsTrue(activeGame.GameStartTime > 0);
+                Assert.IsTrue(activeGame.GameLength > 0);
+                Assert.IsNotNull(activeGame.Observers);
+                Assert.IsTrue(activeGame.GameQueueConfigId > 0);
+                Assert.IsNotNull(activeGame.Participants);
+                Assert.IsNotNull(activeGame.BannedChampions);
             }
             catch (HttpRequestException exception)
             {

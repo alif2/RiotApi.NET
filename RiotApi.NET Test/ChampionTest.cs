@@ -9,6 +9,15 @@ namespace RiotApi.NET_Test
     public class ChampionTest
     {
         [TestMethod]
+        public void WhenRequestAllChampionsShouldReturnListOfAllChampions()
+        {
+            var champions = ChampionApi.GetAllChampions();
+
+            Assert.IsNotNull(champions);
+            Assert.IsTrue(champions.Any());
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestANegativeChampionIdShouldThrowException()
         {
@@ -16,37 +25,12 @@ namespace RiotApi.NET_Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(HttpRequestException))]
-        public void WhenRequestChampionIdTooBigShouldThrowException()
-        {
-            ChampionApi.GetChampion(int.MaxValue);
-        }
-
-        [TestMethod]
         public void WhenRequestAChampionShouldReturnChampionObject()
         {
-            var champion = ChampionApi.GetChampion(1);
+            var champion = ChampionApi.GetChampion(TestSettings.ChampionId);
 
             Assert.IsNotNull(champion);
-            Assert.IsTrue(champion.Id == 1);
-        }
-
-        [TestMethod]
-        public void WhenRequestAChampionShouldReturnChampionObject2()
-        {
-            var champion = ChampionApi.GetChampion(412);
-
-            Assert.IsNotNull(champion);
-            Assert.IsTrue(champion.Id == 412);
-        }
-
-        [TestMethod]
-        public void WhenRequestAllChampionsShouldReturnListOfAllChampions()
-        {
-            var champions = ChampionApi.GetAllChampions();
-
-            Assert.IsNotNull(champions);
-            Assert.IsTrue(champions.Any());
+            Assert.AreEqual(TestSettings.ChampionId, champion.Id);
         }
     } 
 }

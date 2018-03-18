@@ -15,10 +15,45 @@ namespace RiotApi.NET_Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(HttpRequestException))]
-        public void WhenRequestSummonerIdTooBigShouldThrowException()
+        public void WhenRequestSummonerByIdShouldReturnSummonerObject()
         {
-            SummonerApi.GetSummonerByAccountId(int.MaxValue);
+            var summoner = SummonerApi.GetSummoner(TestSettings.SummonerId);
+
+            Assert.IsNotNull(summoner);
+            Assert.AreEqual(TestSettings.SummonerId, summoner.Id);
+            Assert.AreEqual(TestSettings.AccountId, summoner.AccountId);
+            Assert.IsTrue(summoner.Level > 0);
+            Assert.AreEqual(TestSettings.SummonerName, summoner.Name);
+            Assert.IsTrue(summoner.ProfileIconId > 0);
+            Assert.IsTrue(summoner.RevisionDate > 0);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(HttpRequestException))]
+        public void WhenRequestNullSummonerNameShouldThrowException()
+        {
+            SummonerApi.GetSummoner(null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(HttpRequestException))]
+        public void WhenRequestEmptySummonerNameShouldThrowException()
+        {
+            SummonerApi.GetSummoner(string.Empty);
+        }
+
+        [TestMethod]
+        public void WhenRequestSummonerByNameShouldReturnSummonerObject()
+        {
+            var summoner = SummonerApi.GetSummoner(TestSettings.SummonerName);
+
+            Assert.IsNotNull(summoner);
+            Assert.AreEqual(TestSettings.SummonerName, summoner.Name);
+            Assert.AreEqual(TestSettings.AccountId, summoner.AccountId);
+            Assert.IsTrue(summoner.Level > 0);
+            Assert.AreEqual(TestSettings.SummonerId, summoner.Id);
+            Assert.IsTrue(summoner.ProfileIconId > 0);
+            Assert.IsTrue(summoner.RevisionDate > 0);
         }
 
         [TestMethod]
@@ -29,44 +64,17 @@ namespace RiotApi.NET_Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(HttpRequestException))]
-        public void WhenRequestAccountIdTooBigShouldThrowException()
-        {
-            SummonerApi.GetSummoner(int.MaxValue);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(HttpRequestException))]
-        public void WhenRequestNullAccountIdShouldThrowException()
-        {
-            SummonerApi.GetSummoner(null);
-        }
-
-        [TestMethod]
-        public void WhenRequestSummonerByIdShouldReturnSummonerObject()
-        {
-            var summoner = SummonerApi.GetSummoner(5908);
-
-            Assert.IsNotNull(summoner);
-            Assert.AreEqual(5908, summoner.Id);
-        }
-
-        [TestMethod]
         public void WhenRequestSummonerByAccountIdShouldReturnSummonerObject()
         {
-            var summoner = SummonerApi.GetSummonerByAccountId(32766);
+            var summoner = SummonerApi.GetSummonerByAccountId(TestSettings.AccountId);
 
             Assert.IsNotNull(summoner);
-            Assert.AreEqual(32766, summoner.AccountId);
-        }
-
-        [TestMethod]
-        public void WhenRequestSummonerByNameShouldReturnSummonerObject()
-        {
-            var summoner = SummonerApi.GetSummoner("Dyrus");
-
-            Assert.IsNotNull(summoner);
-            Assert.AreEqual("Dyrus", summoner.Name);
+            Assert.AreEqual(TestSettings.SummonerName, summoner.Name);
+            Assert.AreEqual(TestSettings.AccountId, summoner.AccountId);
+            Assert.IsTrue(summoner.Level > 0);
+            Assert.AreEqual(TestSettings.SummonerId, summoner.Id);
+            Assert.IsTrue(summoner.ProfileIconId > 0);
+            Assert.IsTrue(summoner.RevisionDate > 0);
         }
     }
 }
