@@ -5,7 +5,7 @@ using System.Net.Http;
 
 namespace RiotApi.NET
 {
-    public class RiotApi
+    public abstract class RiotApi
     {
         private static string _apiKey;
         protected static string ApiKey

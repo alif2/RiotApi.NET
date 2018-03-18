@@ -12,8 +12,7 @@ namespace RiotApi.NET
         public static IEnumerable<Champion> GetAllChampions()
         {
             var httpResponseMessage = CallApi(_baseUrl);
-            var champions = httpResponseMessage.Content.ReadAsAsync<Dictionary<string, IEnumerable<Champion>>>().Result;
-            return champions.FirstOrDefault().Value;
+            return httpResponseMessage.Content.ReadAsAsync<Dictionary<string, IEnumerable<Champion>>>().Result.First().Value;
         }
 
         public static Champion GetChampion(int championId)
