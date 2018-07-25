@@ -1,23 +1,19 @@
-﻿using RiotApi.NET.Objects;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using RiotApi.NET.Objects.ChampionApi;
 
 namespace RiotApi.NET
 {
-    public class ChampionApi : RiotApi
+    public class ChampionApi : Api
     {
-        private static string _baseUrl = "/lol/platform/v3/champions";
+        public ChampionApi(RiotApi riotApi) : base(riotApi, "/lol/platform/v3/champions") {}
 
-        public static IEnumerable<Champion> GetAllChampions()
+        public ChampionList GetAllChampions()
         {
-            var httpResponseMessage = CallApi(_baseUrl);
-            return httpResponseMessage.Content.ReadAsAsync<Dictionary<string, IEnumerable<Champion>>>().Result.First().Value;
+            return RiotApi.GetObject<ChampionList>(BaseUrl);
         }
 
-        public static Champion GetChampion(int championId)
+        public Champion GetChampion(int championId)
         {
-            return GetObject<Champion>(_baseUrl + $"/{championId}");
+            return RiotApi.GetObject<Champion>(BaseUrl + $"/{championId}");
         }
     }
 }

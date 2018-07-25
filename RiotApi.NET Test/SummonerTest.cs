@@ -7,22 +7,24 @@ namespace RiotApi.NET_Test
     [TestClass]
     public class SummonerTest
     {
+        private readonly SummonerApi _summonerApi = new SummonerApi(new NET.RiotApi("RGAPI-f435204c-c851-4c0f-bc52-75c3ece4e10b", NET.RiotApi.Regions.NA));
+
         [TestMethod]
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestNegativeSummonerIdShouldThrowException()
         {
-            SummonerApi.GetSummoner(-1);
+            _summonerApi.GetSummoner(-1);
         }
 
         [TestMethod]
         public void WhenRequestSummonerByIdShouldReturnSummonerObject()
         {
-            var summoner = SummonerApi.GetSummoner(TestSettings.SummonerId);
+            var summoner = _summonerApi.GetSummoner(TestSettings.SummonerId);
 
             Assert.IsNotNull(summoner);
             Assert.AreEqual(TestSettings.SummonerId, summoner.Id);
             Assert.AreEqual(TestSettings.AccountId, summoner.AccountId);
-            Assert.IsTrue(summoner.Level > 0);
+            Assert.IsTrue(summoner.SummonerLevel > 0);
             Assert.AreEqual(TestSettings.SummonerName, summoner.Name);
             Assert.IsTrue(summoner.ProfileIconId > 0);
             Assert.IsTrue(summoner.RevisionDate > 0);
@@ -32,25 +34,25 @@ namespace RiotApi.NET_Test
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestNullSummonerNameShouldThrowException()
         {
-            SummonerApi.GetSummoner(null);
+            _summonerApi.GetSummoner(null);
         }
 
         [TestMethod]
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestEmptySummonerNameShouldThrowException()
         {
-            SummonerApi.GetSummoner(string.Empty);
+            _summonerApi.GetSummoner(string.Empty);
         }
 
         [TestMethod]
         public void WhenRequestSummonerByNameShouldReturnSummonerObject()
         {
-            var summoner = SummonerApi.GetSummoner(TestSettings.SummonerName);
+            var summoner = _summonerApi.GetSummoner(TestSettings.SummonerName);
 
             Assert.IsNotNull(summoner);
             Assert.AreEqual(TestSettings.SummonerName, summoner.Name);
             Assert.AreEqual(TestSettings.AccountId, summoner.AccountId);
-            Assert.IsTrue(summoner.Level > 0);
+            Assert.IsTrue(summoner.SummonerLevel > 0);
             Assert.AreEqual(TestSettings.SummonerId, summoner.Id);
             Assert.IsTrue(summoner.ProfileIconId > 0);
             Assert.IsTrue(summoner.RevisionDate > 0);
@@ -60,18 +62,18 @@ namespace RiotApi.NET_Test
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestNegativeAccountIdShouldThrowException()
         {
-            SummonerApi.GetSummonerByAccountId(-1);
+            _summonerApi.GetSummonerByAccountId(-1);
         }
 
         [TestMethod]
         public void WhenRequestSummonerByAccountIdShouldReturnSummonerObject()
         {
-            var summoner = SummonerApi.GetSummonerByAccountId(TestSettings.AccountId);
+            var summoner = _summonerApi.GetSummonerByAccountId(TestSettings.AccountId);
 
             Assert.IsNotNull(summoner);
             Assert.AreEqual(TestSettings.SummonerName, summoner.Name);
             Assert.AreEqual(TestSettings.AccountId, summoner.AccountId);
-            Assert.IsTrue(summoner.Level > 0);
+            Assert.IsTrue(summoner.SummonerLevel > 0);
             Assert.AreEqual(TestSettings.SummonerId, summoner.Id);
             Assert.IsTrue(summoner.ProfileIconId > 0);
             Assert.IsTrue(summoner.RevisionDate > 0);

@@ -1,14 +1,14 @@
-﻿using RiotApi.NET.Objects;
+﻿using RiotApi.NET.Objects.LolStatusApi;
 
 namespace RiotApi.NET
 {
-    public class LolStatusApi : RiotApi
+    public class LolStatusApi : Api
     {
-        private static string _baseUrl = "/lol/status/v3";
+        public LolStatusApi(RiotApi riotApi) : base(riotApi, "/lol/status/v3") {}
 
-        public static ShardStatus GetShardStatus()
+        public ShardStatus GetShardStatus()
         {
-            return GetObject<ShardStatus>(_baseUrl + "/shard-data/");
+            return RiotApi.GetObject<ShardStatus>(BaseUrl + "/shard-data/");
         }
     }
 }

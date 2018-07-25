@@ -1,45 +1,84 @@
 ﻿using RiotApi.NET.Objects;
 using System;
-using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 
 namespace RiotApi.NET
 {
-    public abstract class RiotApi
+    public class RiotApi
     {
-        private static string _apiKey;
-        protected static string ApiKey
+        public string ApiKey { get; set; }
+        
+        private HttpClient HttpClient { get; }
+
+        public RiotApi(string apiKey, Regions regions)
         {
-            get
-            {
-                if (_apiKey != null) return _apiKey;
-                return _apiKey = File.ReadAllText("api-key.txt");
-            }
-            set => _apiKey = value;
+            ApiKey = apiKey;
+
+            HttpClient = new HttpClient();
+            SetRegion(regions);
         }
 
-        protected static HttpClient HttpClient = new HttpClient { BaseAddress = new Uri("https://na1.api.riotgames.com") };
+        public Regions GetRegion()
+        {
+            var httpClientBaseAddress = HttpClient.BaseAddress.ToString();
+            var foundEndpoint = _serverEndpoints.First(endpoint => endpoint.Value.Equals(httpClientBaseAddress));
+            return foundEndpoint.Key;
+        }
+
+        public void SetRegion(Regions regions)
+        {
+            HttpClient.BaseAddress = new Uri(_serverEndpoints[regions]);
+        }
+
+        public enum Regions
+        {
+            BR, EUNE, EUW, JP, KR, LAN, LAS, NA, OCE, TR, RU, PBE
+        }
+
+        private readonly Dictionary<Regions, string> _serverEndpoints = new Dictionary<Regions, string>
+        {
+            { Regions.BR, "https://br1.api.riotgames.com"},
+            { Regions.EUNE, "https://eun1.api.riotgames.com" },
+            { Regions.EUW, "https://euw1.api.riotgames.com" },
+            { Regions.JP, "https://jp1.api.riotgames.com" },
+            { Regions.KR, "https://kr.api.riotgames.com" },
+            { Regions.LAN, "https://la1.api.riotgames.com" },
+            { Regions.LAS, "https://la2.api.riotgames.com" },
+            { Regions.NA, "https://na1.api.riotgames.com" },
+            { Regions.OCE, "https://oc1.api.riotgames.com" },
+            { Regions.TR, "https://tr1.api.riotgames.com" },
+            { Regions.RU, "https://ru.api.riotgames.com" },
+            { Regions.PBE, "https://pbe1.api.riotgames.com" }
+        };
         
-        protected static T GetObject<T>(string apiUrl)
+        public T GetObject<T>(string apiUrl)
         {
             var httpResponseMessage = CallApi(apiUrl);
             return httpResponseMessage.Content.ReadAsAsync<T>().Result;
         }
 
-        protected static T GetObjectWithOptionalParameters<T>(string apiUrl, OptionalParameters optionalParameters)
+        public T GetObjectWithOptionalParameters<T>(string apiUrl, OptionalParameters optionalParameters)
         {
             var httpResponseMessage = CallApiWithOptionalParameters(apiUrl, optionalParameters);
             return httpResponseMessage.Content.ReadAsAsync<T>().Result;
         }
 
-        protected static HttpResponseMessage CallApi(string apiUrl)
+        public string GetString(string apiUrl)
+        {
+            var httpResponseMessage = CallApi(apiUrl);
+            return httpResponseMessage.Content.ReadAsStringAsync().Result;
+        }
+
+        public HttpResponseMessage CallApi(string apiUrl)
         {
             var httpResponseMessage = HttpClient.GetAsync(apiUrl + $"?api_key={ApiKey}").Result;
             httpResponseMessage.EnsureSuccessStatusCode();
             return httpResponseMessage;
         }
 
-        protected static HttpResponseMessage CallApiWithOptionalParameters(string apiUrl, OptionalParameters optionalParameters)
+        public HttpResponseMessage CallApiWithOptionalParameters(string apiUrl, OptionalParameters optionalParameters)
         {
             var httpResponseMessage = HttpClient.GetAsync(apiUrl + $"?api_key={ApiKey}{optionalParameters}").Result;
             httpResponseMessage.EnsureSuccessStatusCode();

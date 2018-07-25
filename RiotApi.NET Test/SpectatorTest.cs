@@ -8,11 +8,13 @@ namespace RiotApi.NET_Test
     [TestClass]
     public class SpectatorTest
     {
+        private readonly SpectatorApi _spectatorApi = new SpectatorApi(new NET.RiotApi("RGAPI-f435204c-c851-4c0f-bc52-75c3ece4e10b", NET.RiotApi.Regions.NA));
+
         [TestMethod]
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestActiveGameForNullSummonerIdShouldThrowException()
         {
-            SpectatorApi.GetActiveGame(-1);
+            _spectatorApi.GetActiveGame(-1);
         }
 
         [TestMethod]
@@ -20,7 +22,7 @@ namespace RiotApi.NET_Test
         {
             try
             {
-                var activeGame = SpectatorApi.GetActiveGame(TestSettings.SummonerId);
+                var activeGame = _spectatorApi.GetActiveGame(TestSettings.SummonerId);
                 Assert.IsNotNull(activeGame);
                 Assert.IsTrue(activeGame.GameId > 0);
                 Assert.IsTrue(activeGame.GameLength > 0);
@@ -45,9 +47,9 @@ namespace RiotApi.NET_Test
         [TestMethod]
         public void WhenRequestFeaturedGamesShouldReturnObject()
         {
-            var featuredGames = SpectatorApi.GetFeaturedGames();
+            var featuredGames = _spectatorApi.GetFeaturedGames();
             Assert.IsTrue(featuredGames.ClientRefreshInterval > 0);
-            Assert.IsTrue(featuredGames.Games.Any());
+            Assert.IsTrue(featuredGames.GameList.Any());
         }
     }
 }

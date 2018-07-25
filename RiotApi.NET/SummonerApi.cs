@@ -1,24 +1,24 @@
-﻿using RiotApi.NET.Objects;
+﻿using RiotApi.NET.Objects.SummonerApi;
 
 namespace RiotApi.NET
 {
-    public class SummonerApi : RiotApi
+    public class SummonerApi : Api
     {
-        private static string _baseUrl = "/lol/summoner/v3/summoners";
+        public SummonerApi(RiotApi riotApi) : base(riotApi, "/lol/summoner/v3/summoners") {}
 
-        public static Summoner GetSummoner(long summonerId)
+        public Summoner GetSummoner(long summonerId)
         {
-            return GetObject<Summoner>(_baseUrl + $"/{summonerId}");
+            return RiotApi.GetObject<Summoner>(BaseUrl + $"/{summonerId}");
         }
 
-        public static Summoner GetSummoner(string summonerName)
+        public Summoner GetSummoner(string summonerName)
         {
-            return GetObject<Summoner>(_baseUrl + $"/by-name/{summonerName}");
+            return RiotApi.GetObject<Summoner>(BaseUrl + $"/by-name/{summonerName}");
         }
 
-        public static Summoner GetSummonerByAccountId(int accountId)
+        public Summoner GetSummonerByAccountId(int accountId)
         {
-            return GetObject<Summoner>(_baseUrl + $"/by-account/{accountId}");
+            return RiotApi.GetObject<Summoner>(BaseUrl + $"/by-account/{accountId}");
         }
     }
 }

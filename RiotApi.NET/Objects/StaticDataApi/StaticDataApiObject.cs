@@ -2,7 +2,7 @@
 
 namespace RiotApi.NET.Objects.StaticDataApi
 {
-    public class StaticDataApiObject
+    public abstract class StaticDataApiObject
     {
         [JsonProperty("version")]
         public string Version { get; set; }

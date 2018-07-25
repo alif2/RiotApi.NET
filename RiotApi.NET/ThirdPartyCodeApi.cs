@@ -1,12 +1,12 @@
 ﻿namespace RiotApi.NET
 {
-    public class ThirdPartyCodeApi : RiotApi
+    public class ThirdPartyCodeApi : Api
     {
-        private static string _baseUrl = "/lol/platform/v3/third-party-code";
+        public ThirdPartyCodeApi(RiotApi riotApi) : base(riotApi, "/lol/platform/v3/third-party-code") {}
 
-        public static string GetThirdPartyCode(long summonerId)
+        public string GetThirdPartyCode(long summonerId)
         {
-            return GetObject<string>(_baseUrl + $"/by-summoner/{summonerId}");
+            return RiotApi.GetString(BaseUrl + $"/by-summoner/{summonerId}");
         }
     }
 }

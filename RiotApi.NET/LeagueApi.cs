@@ -1,30 +1,30 @@
-﻿using RiotApi.NET.Objects;
+﻿using RiotApi.NET.Objects.LeagueApi;
 using System.Collections.Generic;
 
 namespace RiotApi.NET
 {
-    public class LeagueApi : RiotApi
+    public class LeagueApi : Api
     {
-        private static string _baseUrl = "/lol/league/v3";
+        public LeagueApi(RiotApi riotApi) : base(riotApi, "/lol/league/v3") {}
 
-        public static League GetLeague(string leagueId)
+        public LeagueList GetLeague(string leagueId)
         {
-            return GetObject<League>(_baseUrl + $"/leagues/{leagueId}");
+            return RiotApi.GetObject<LeagueList>(BaseUrl + $"/leagues/{leagueId}");
         }
 
-        public static League GetMasterLeague(string queueName)
+        public LeagueList GetMasterLeague(string queueName)
         {
-            return GetObject<League>(_baseUrl + $"/masterleagues/by-queue/{queueName}");
+            return RiotApi.GetObject<LeagueList>(BaseUrl + $"/masterleagues/by-queue/{queueName}");
         }
 
-        public static League GetChallengerLeague(string queueName)
+        public LeagueList GetChallengerLeague(string queueName)
         {
-            return GetObject<League>(_baseUrl + $"/challengerleagues/by-queue/{queueName}");
+            return RiotApi.GetObject<LeagueList>(BaseUrl + $"/challengerleagues/by-queue/{queueName}");
         }
 
-        public static IEnumerable<LeaguePosition> GetLeaguePositions(long summonerId)
+        public IEnumerable<LeaguePosition> GetLeaguePositions(long summonerId)
         {
-            return GetObject<IEnumerable<LeaguePosition>>(_baseUrl + $"/positions/by-summoner/{summonerId}");
+            return RiotApi.GetObject<IEnumerable<LeaguePosition>>(BaseUrl + $"/positions/by-summoner/{summonerId}");
         }
     }
 }

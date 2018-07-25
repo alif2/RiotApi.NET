@@ -7,25 +7,27 @@ namespace RiotApi.NET_Test
     [TestClass]
     public class LeagueTest
     {
+        private readonly LeagueApi _leagueApi = new LeagueApi(new NET.RiotApi("RGAPI-f435204c-c851-4c0f-bc52-75c3ece4e10b", NET.RiotApi.Regions.NA));
+
         [TestMethod]
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestEmptyLeagueIdShouldThrowException()
         {
-            LeagueApi.GetLeague(string.Empty);
+            _leagueApi.GetLeague(string.Empty);
         }
 
         [TestMethod]
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestNullLeagueIdShouldThrowException()
         {
-            LeagueApi.GetLeague(null);
+            _leagueApi.GetLeague(null);
         }
 
         [TestMethod]
         public void WhenRequestLeagueShouldReturnObject()
         {
-            var league = LeagueApi.GetLeague(TestSettings.LeagueId);
-            Assert.AreEqual(TestSettings.LeagueId, league.Id);
+            var league = _leagueApi.GetLeague(TestSettings.LeagueId);
+            Assert.AreEqual(TestSettings.LeagueId, league.LeagueId);
             Assert.IsNotNull(league.Tier);
             Assert.IsNotNull(league.Name);
             Assert.IsNotNull(league.Entries);
@@ -36,21 +38,21 @@ namespace RiotApi.NET_Test
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestEmptyMasterLeagueIdShouldThrowException()
         {
-            LeagueApi.GetMasterLeague(string.Empty);
+            _leagueApi.GetMasterLeague(string.Empty);
         }
 
         [TestMethod]
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestNullMasterLeagueIdShouldThrowException()
         {
-            LeagueApi.GetMasterLeague(null);
+            _leagueApi.GetMasterLeague(null);
         }
 
         [TestMethod]
         public void WhenRequestMasterLeagueShouldReturnObject()
         {
-            var masterLeague = LeagueApi.GetMasterLeague(TestSettings.Queue);
-            Assert.IsNotNull(masterLeague.Id);
+            var masterLeague = _leagueApi.GetMasterLeague(TestSettings.Queue);
+            Assert.IsNotNull(masterLeague.LeagueId);
             Assert.AreEqual("MASTER", masterLeague.Tier);
             Assert.IsNotNull(masterLeague.Name);
             Assert.IsNotNull(masterLeague.Entries);
@@ -61,21 +63,21 @@ namespace RiotApi.NET_Test
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestEmptyChallengerLeagueIdShouldThrowException()
         {
-            LeagueApi.GetChallengerLeague(string.Empty);
+            _leagueApi.GetChallengerLeague(string.Empty);
         }
 
         [TestMethod]
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestNullChallengerLeagueIdShouldThrowException()
         {
-            LeagueApi.GetChallengerLeague(null);
+            _leagueApi.GetChallengerLeague(null);
         }
 
         [TestMethod]
         public void WhenRequestChallengerLeagueShouldReturnObject()
         {
-            var challengerLeague = LeagueApi.GetChallengerLeague(TestSettings.Queue);
-            Assert.IsNotNull(challengerLeague.Id);
+            var challengerLeague = _leagueApi.GetChallengerLeague(TestSettings.Queue);
+            Assert.IsNotNull(challengerLeague.LeagueId);
             Assert.AreEqual("CHALLENGER", challengerLeague.Tier);
             Assert.IsNotNull(challengerLeague.Name);
             Assert.IsNotNull(challengerLeague.Entries);
@@ -86,22 +88,22 @@ namespace RiotApi.NET_Test
         [ExpectedException(typeof(HttpRequestException))]
         public void WhenRequestLeaguePositionForNegativeSummonerIdShouldThrowException()
         {
-            LeagueApi.GetLeaguePositions(-1);
+            _leagueApi.GetLeaguePositions(-1);
         }
 
         [TestMethod]
         public void WhenRequestLeaguePositionShouldReturnObject()
         {
-            var leaguePositions = LeagueApi.GetLeaguePositions(TestSettings.SummonerId);
+            var leaguePositions = _leagueApi.GetLeaguePositions(TestSettings.SummonerId);
 
             Assert.IsNotNull(leaguePositions);
 
             foreach (var position in leaguePositions)
             {
-                Assert.IsNotNull(position.Id);
+                Assert.IsNotNull(position.PlayerOrTeamId);
                 Assert.IsNotNull(position.LeagueId);
                 Assert.IsNotNull(position.LeagueName);
-                Assert.IsNotNull(position.Name);
+                Assert.IsNotNull(position.PlayerOrTeamName);
                 Assert.IsNotNull(position.Rank);
                 Assert.IsNotNull(position.Tier);
             }

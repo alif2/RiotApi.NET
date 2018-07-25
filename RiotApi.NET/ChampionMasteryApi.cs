@@ -1,24 +1,25 @@
-﻿using RiotApi.NET.Objects;
+﻿using RiotApi.NET.Objects.ChampionMasteryApi;
 using System.Collections.Generic;
 
 namespace RiotApi.NET
 {
-    public class ChampionMasteryApi : RiotApi
+    public class ChampionMasteryApi : Api
     {
-        private static string _baseUrl = "/lol/champion-mastery/v3";
+        public ChampionMasteryApi(RiotApi riotApi) : base(riotApi, "/lol/champion-mastery/v3") {}
 
-        public static IEnumerable<ChampionMastery> GetChampionMasteriesBySummonerId(long summonerId)
+        public IEnumerable<ChampionMastery> GetChampionMasteriesBySummonerId(long summonerId)
         {
-            return GetObject<IEnumerable<ChampionMastery>>(_baseUrl + $"/champion-masteries/by-summoner/{summonerId}");
+            return RiotApi.GetObject<IEnumerable<ChampionMastery>>(BaseUrl + $"/champion-masteries/by-summoner/{summonerId}");
         }
 
-        public static ChampionMastery GetChampionMasteryBySummonerIdAndChampionId(long summonerId, long championId)
+        public ChampionMastery GetChampionMasteryBySummonerIdAndChampionId(long summonerId, long championId)
         {
-            return GetObject<ChampionMastery>(_baseUrl + $"/champion-masteries/by-summoner/{summonerId}/by-champion/{championId}");
+            return RiotApi.GetObject<ChampionMastery>(BaseUrl + $"/champion-masteries/by-summoner/{summonerId}/by-champion/{championId}");
         }
-        public static int GetMasteryScoreBySummonerId(long summonerId)
+
+        public int GetMasteryScoreBySummonerId(long summonerId)
         {
-            return GetObject<int>(_baseUrl + $"/scores/by-summoner/{summonerId}");
+            return RiotApi.GetObject<int>(BaseUrl + $"/scores/by-summoner/{summonerId}");
         }
     }
 }

@@ -1,40 +1,36 @@
 ﻿using RiotApi.NET.Objects;
+using RiotApi.NET.Objects.MatchApi;
 using System.Collections.Generic;
 
 namespace RiotApi.NET
 {
-    public class MatchApi : RiotApi
+    public class MatchApi : Api
     {
-        private static string _baseUrl = "/lol/match/v3";
+        public MatchApi(RiotApi riotApi) : base(riotApi, "/lol/match/v3") {}
 
-        public static Match GetMatchById(long matchId)
+        public Match GetMatchById(long matchId)
         {
-            return GetObject<Match>(_baseUrl + $"/matches/{matchId}");
+            return RiotApi.GetObject<Match>(BaseUrl + $"/matches/{matchId}");
         }
 
-        public static MatchList GetMatchesByAccountId(int accountId, OptionalParameters optionalParameters)
+        public MatchList GetMatchesByAccountId(int accountId, OptionalParameters optionalParameters)
         {
-            return GetObjectWithOptionalParameters<MatchList>(_baseUrl + $"/matchlists/by-account/{accountId}", optionalParameters);
+            return RiotApi.GetObjectWithOptionalParameters<MatchList>(BaseUrl + $"/matchlists/by-account/{accountId}", optionalParameters);
         }
 
-        public static MatchList GetRecentMatchesByAccountId(int accountId)
+        public MatchTimeline GetMatchTimelineById(long matchId)
         {
-            return GetObject<MatchList>(_baseUrl + $"/matchlists/by-account/{accountId}/recent");
+            return RiotApi.GetObject<MatchTimeline>(BaseUrl + $"/timelines/by-match/{matchId}");
         }
 
-        public static MatchTimeline GetMatchTimelineById(long matchId)
+        public IEnumerable<long> GetMatchesByTournamentCode(string tournamentCode)
         {
-            return GetObject<MatchTimeline>(_baseUrl + $"/timelines/by-match/{matchId}");
+            return RiotApi.GetObject<IEnumerable<long>>(BaseUrl + $"/matches/by-tournament-code/{tournamentCode}/ids");
         }
 
-        public static IEnumerable<long> GetMatchesByTournamentCode(string tournamentCode)
+        public Match GetMatchByTournamentCode(long matchId, string tournamentCode)
         {
-            return GetObject<IEnumerable<long>>(_baseUrl + $"/matches/by-tournament-code/{tournamentCode}/ids");
-        }
-
-        public static Match GetMatchByTournamentCode(long matchId, string tournamentCode)
-        {
-            return GetObject<Match>(_baseUrl + $"/matches/{matchId}/by-tournament-code/{tournamentCode}");
+            return RiotApi.GetObject<Match>(BaseUrl + $"/matches/{matchId}/by-tournament-code/{tournamentCode}");
         }
     }
 }
